@@ -13,9 +13,7 @@ export class MqttClientService {
     });
 
     this.client.on('message', (topic, message) => {
-      console.log(
-        `Mensagem recebida no tópico ${topic}: ${message.toString()}`,
-      );
+      console.log(`${message.toString()}`);
     });
   }
 

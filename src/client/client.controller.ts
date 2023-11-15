@@ -5,11 +5,11 @@ import { MqttClientService } from './client.service';
 export class MqttController {
   constructor(private readonly mqttService: MqttClientService) {
     // Subscreva a um tópico específico
-    this.mqttService.subscribeToTopic('/esp-mongo/save');
+    this.mqttService.subscribeToTopic('/brilliant/listen');
   }
 
   @Get()
   getHello(): string {
-    return 'Hello, MQTT!';
+    return 'If you"ve made it here, congratulations this is the Brilliant embedded server :)';
   }
 }
