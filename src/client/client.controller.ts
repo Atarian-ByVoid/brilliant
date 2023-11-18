@@ -4,8 +4,7 @@ import { MqttClientService } from './client.service';
 @Controller('mqtt')
 export class MqttController {
   constructor(private readonly mqttService: MqttClientService) {
-    // Subscreva a um tópico específico
-    this.mqttService.subscribeToTopic('/brilliant/listen');
+    this.mqttService.subscribeToTopics(['data', 'AT-ST']);
   }
 
   @Get()

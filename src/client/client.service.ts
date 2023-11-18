@@ -1,23 +1,53 @@
 import { Injectable } from '@nestjs/common';
 import * as mqtt from 'mqtt';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class MqttClientService {
-  private readonly client;
+  private readonly client: mqtt.MqttClient;
 
-  constructor() {
+  constructor(private prismaService: PrismaService) {
     this.client = mqtt.connect('mqtt://localhost');
+    this.client.on('message', async (topic, message) => {
+      const content = message.toString();
+      console.log(` ${content}`);
 
-    this.client.on('connect', () => {
-      console.log('Conectado ao servidor MQTT');
-    });
-
-    this.client.on('message', (topic, message) => {
-      console.log(`${message.toString()}`);
+      try {
+        if (topic === 'data') {
+          const mqttData = JSON.parse(content);
+          await this.handleDataMessage(mqttData);
+        } else if (topic === 'AT-ST') {
+          await this.handleArteMessage(content);
+        } else {
+          console.log(`Tópico desconhecido: ${topic}`);
+        }
+      } catch (error) {
+        console.error('Erro ao processar mensagem:', error.message);
+      }
     });
   }
 
-  subscribeToTopic(topic: string) {
-    this.client.subscribe(topic);
+  subscribeToTopics(topics: string[]) {
+    topics.forEach((topic) => {
+      this.client.subscribe(topic);
+    });
+  }
+
+  async handleDataMessage(mqttData: any) {
+    console.log('Dados recebidos:', mqttData);
+    await this.prismaService.aSSCII.create({
+      data: {
+        criadoEm: new Date(),
+        field1: mqttData.field1,
+        field2: parseFloat(mqttData.field2),
+      },
+    });
+  }
+  async handleArteMessage(mqttData: any) {
+    if (typeof mqttData === 'string') {
+      console.log(mqttData);
+    } else {
+      console.log('Formato de mensagem de arte inválido:', mqttData);
+    }
   }
 }
