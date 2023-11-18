@@ -2,13 +2,17 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ScheduleModule } from '@nestjs/schedule';
+import { AuthController } from './auth/client/auth.controller';
 import { AuthModule } from './auth/client/auth.module';
+import { AuthService } from './auth/client/auth.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { PrismaService } from './prisma/prisma.service';
 import { DatabaseCleanupService } from './temperatures/client/database-cleanup/database-cleanup.service';
 import { MqttController } from './temperatures/client/temperatures.controller';
 import { ClientModule } from './temperatures/client/temperatures.module';
 import { MqttClientService } from './temperatures/client/temperatures.service';
+import { UserController } from './usuarios/client/user.controller';
+import { UserSrvice } from './usuarios/client/user.service';
 
 @Module({
   imports: [
@@ -29,7 +33,13 @@ import { MqttClientService } from './temperatures/client/temperatures.service';
     // MongooseModule.forRoot(process.env.DATABASE_URL),
     // EspMongoModule,
   ],
-  providers: [MqttClientService, PrismaService, DatabaseCleanupService],
-  controllers: [MqttController],
+  providers: [
+    MqttClientService,
+    PrismaService,
+    DatabaseCleanupService,
+    UserSrvice,
+    AuthService,
+  ],
+  controllers: [MqttController, UserController, AuthController],
 })
 export class AppModule {}

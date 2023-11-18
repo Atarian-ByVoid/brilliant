@@ -20,7 +20,7 @@ model Temperatures {
   celsiusTemperature    Decimal
   fahrenheitTemperature Decimal
 
-  @@map("tbm_temperatures")
+  @@map("tb_temperatures")
 }
 
 model User {
