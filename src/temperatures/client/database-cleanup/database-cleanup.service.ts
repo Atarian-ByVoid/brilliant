@@ -10,7 +10,7 @@ export class DatabaseCleanupService {
   @Cron(CronExpression.EVERY_12_HOURS)
   async cleanupDatabase() {
     try {
-      await this.prismaService.aSSCII.deleteMany({});
+      await this.prismaService.temperatures.deleteMany({});
 
       console.log('Limpeza do banco de dados concluída.');
     } catch (error) {

@@ -1,7 +1,7 @@
 // esp-mongo.module.ts
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { MqttClientService } from 'src/client/client.service';
+import { MqttClientService } from 'src/temperatures/client/temperatures.service';
 import { EspMongoController } from './esp-mongo.controller';
 import { ASCIISchema } from './esp-mongo.schema';
 import { EspMongoService } from './esp-mongo.service';
