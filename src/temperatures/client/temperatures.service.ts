@@ -73,6 +73,7 @@ export class MqttClientService {
   async findOneTemperature(id: string) {
     const dataTemparature = await this.prismaService.temperatures.findFirst({
       where: {
+        deletedAt: null,
         id,
       },
     });
