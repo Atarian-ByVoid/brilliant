@@ -7,12 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ASSCII {
-  id       String   @id @default(uuid())
-  criadoEm DateTime @default(now())
+enum Role {
+  USER
+  ADMIN
+}
 
-  field1 String
-  field2 Decimal
+model Temperatures {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
 
-  @@map("tb_ascii")
+  celsiusTemperature    Decimal
+  fahrenheitTemperature Decimal
+
+  @@map("tbm_temperatures")
+}
+
+model User {
+  id        String    @id @default(uuid())
+  createdAt DateTime  @default(now())
+  deletedAt DateTime?
+  updateAt  DateTime  @updatedAt
+
+  email    String @unique
+  password String
+  username String @unique
+  role     Role   @default(USER)
+
+  @@map("tb_users")
 }
