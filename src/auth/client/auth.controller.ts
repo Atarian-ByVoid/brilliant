@@ -1,7 +1,7 @@
-import { Body, Controller, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller, Param, Post, Put, Request, UnauthorizedException, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from 'src/usuarios/client/user.dto';
-import { UpdateRoleDTO } from './auth.dto';
+import { AuthUserDTO, UpdateRoleDTO } from './auth.dto';
 import { AuthService } from './auth.service';
 
 @ApiTags('Register')
@@ -15,6 +15,7 @@ export class AuthController {
 
     return {
       message: `Usuario com nome de ${CreateUserDTO.username} foi criado com sucesso!`,
+      CreateUserDTO
     };
   }
 
@@ -32,4 +33,15 @@ export class AuthController {
       message: `Usuario com nome de ${updatedUser.username} teve a role atualizada com sucesso!`,
     };
   }
+
+  @Post('login')
+  async login(@Body() authUserDTO: AuthUserDTO) {
+    try {
+      const bearerToken = await this.authService.login(authUserDTO);
+      return { token: bearerToken };
+    } catch (error) {
+      throw new UnauthorizedException('Credenciais inválidas');
+    }
+  }
+
 }

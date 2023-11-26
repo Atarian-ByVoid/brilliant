@@ -1,9 +1,10 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UpdateUserDTO } from './user.dto';
+import { User } from '@prisma/client';
 
 @Injectable()
-export class UserSrvice {
+export class UserService {
   constructor(private prisma: PrismaService) {}
 
   async findAllUsers(page: number, pageSize: number) {
@@ -81,4 +82,24 @@ export class UserSrvice {
       };
     }
   }
+
+
+  async validateUser(payload: any): Promise<User | null> {
+    try {
+      const { email } = payload;
+
+      const user = await this.prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+
+      return user;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        'Erro ao validar o usuário: ' + error.message,
+      );
+    }
+  }
+
 }

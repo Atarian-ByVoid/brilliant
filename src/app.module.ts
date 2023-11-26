@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ScheduleModule } from '@nestjs/schedule';
 import { AuthController } from './auth/client/auth.controller';
@@ -12,7 +12,8 @@ import { MqttController } from './temperatures/client/temperatures.controller';
 import { ClientModule } from './temperatures/client/temperatures.module';
 import { MqttClientService } from './temperatures/client/temperatures.service';
 import { UserController } from './usuarios/client/user.controller';
-import { UserSrvice } from './usuarios/client/user.service';
+import { UserService } from './usuarios/client/user.service';
+
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { UserSrvice } from './usuarios/client/user.service';
     MqttClientService,
     PrismaService,
     DatabaseCleanupService,
-    UserSrvice,
+    UserService,
     AuthService,
   ],
   controllers: [MqttController, UserController, AuthController],

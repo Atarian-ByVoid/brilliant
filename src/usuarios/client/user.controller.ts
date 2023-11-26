@@ -7,15 +7,19 @@ import {
   Param,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
 import { UpdateUserDTO } from './user.dto';
-import { UserSrvice } from './user.service';
+import { UserService } from './user.service';
+import { JwtAuthGuard } from 'src/auth/client/guard/auth.guard';
 
 @ApiTags('Users')
 @Controller('user')
+@ApiSecurity('bearer')
+@UseGuards(JwtAuthGuard)
 export class UserController {
-  constructor(private readonly userService: UserSrvice) {}
+  constructor(private readonly userService: UserService) {}
 
   @Get()
   async findAll(
